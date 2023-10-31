@@ -1,0 +1,76 @@
+pipeline {
+    agent any
+    parameters {
+        string(
+            name: 'Source_AWS_Account_ID',
+            description: "mention the source aws account id which will be as '381743254372' "
+        )
+        string(
+            name: 'Source_AWS_Access_Key_ID',
+            description: "mention the source aws account id which will be as '381743254372' "
+        )
+        string(
+            name: 'Source_AWS_Secret_Access_Key',
+            description: "mention the source aws account id which will be as '381743254372' "
+        )
+        string(
+            name: 'Source_AWS_Region',
+            description: "mention the Source aws account region which will be as 'ap-south-1' "
+        )
+        string(
+            name: 'Source_ECR_Repo',
+            description: "mention the Source aws ecr repo name which will be as 'sam-kt-ecr' "
+        )
+        string(
+            name: 'Source_Image_Tag',
+            description: "mention the Source aws Image Tag which will be as 'tag-213-23234-3' "
+        )        
+
+        string(
+            name: 'Destination_AWS_Account_ID',
+            description: "mention the Destination aws account id which will be as '381743254372' "
+        )
+        string(
+            name: 'Destination_AWS_Access_Key_ID',
+            description: "mention the source aws account id which will be as '381743254372' "
+        )
+        string(
+            name: 'Destination_AWS_Secret_Access_Key',
+            description: "mention the source aws account id which will be as '381743254372' "
+        )
+        string(
+            name: 'Destination_AWS_Region',
+            description: "mention the Destination aws account region which will be as 'ap-south-1' "
+        )
+        string(
+            name: 'Destination_ECR_Repo',
+            description: "mention the Destination aws ecr repo name which will be as 'sam-kt-ecr' "
+        )
+        string(
+            name: 'Destination_Image_Tag',
+            description: "mention the Destination aws Image Tag which will be as 'tag-213-23234-3' "
+        )             
+    }
+    // environment{
+    //     repo_url = 'https://github.com/karthick-murugesan/meetup-oct23'
+    //     branch = 'main'
+    //     ECR_REPO = '381743254372.dkr.ecr.us-west-1.amazonaws.com/meetup'
+    // }
+    stages{
+        stage('Get Source Image'){
+            steps{
+                script{
+                    sh '''
+                        export AWS_ACCESS_KEY_ID="${Source_AWS_Access_Key_ID}"
+                        export AWS_SECRET_ACCESS_KEY="${Source_AWS_Secret_Access_Key}"
+                        aws ecr get-login-password --region ${Source_AWS_Region} | docker login --username AWS --password-stdin ${Source_AWS_Account_ID}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
+                        docker pull ${Source_AWS_Account_ID}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag}
+                        unset AWS_ACCESS_KEY_ID
+                        unset AWS_SECRET_ACCESS_KEY
+                    '''
+                }
+            }
+
+        }
+    }
+}       
