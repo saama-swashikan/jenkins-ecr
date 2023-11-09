@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: ecr-pod
+  name: sch-sit2-jenkins
 spec:
   containers:
-  - name: ecr-container
+  - name: sch-code-builder
     image: 791532114280.dkr.ecr.us-east-1.amazonaws.com/sch-build-agent:sch-sit2-final234
     resources:
         limits:
@@ -21,3 +21,7 @@ spec:
       - mountPath: "/home/node/jenkins"
         name: "workspace-volume"
         readOnly: false
+  volumes:
+    - name: docker-config
+      configMap:
+        name: docker-config
