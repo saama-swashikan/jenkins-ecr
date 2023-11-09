@@ -1,8 +1,12 @@
 pipeline {
-agent {
-    kubernetes {
-      yamlFile 'deploy/AgentPod.yaml'
-        }
+    agent {
+        kubernetes {
+          yamlFile 'deploy/AgentPod.yaml'
+            }
+    }
+    environment{
+        AI_RESEARCH_SAAMA = '381743254372'
+        LSACONE_DEV = '791532114280'
     }
     parameters {
         choice(name: 'SOURCE_AWS_ACCOUNT', choices:'ai-research-saama\nlsacone-dev', description:'Select Source AWS Account')
@@ -31,10 +35,6 @@ agent {
             name: 'Destination_Image_Tag',
             description: "mention the Destination aws Image Tag which will be as 'tag-213-23234-3' "
         )             
-    }
-    environment{
-        AI_RESEARCH_SAAMA = '381743254372'
-        LSACONE_DEV = '791532114280'
     }
     stages{
         stage('Pull Source Image'){
