@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+    kubernetes {
+      yamlFile 'AgentPod.yaml'
+        }
+    }
     parameters {
         choice(name: 'SOURCE_AWS_ACCOUNT', choices:'ai-research-saama\nlsacone-dev', description:'Select Source AWS Account')
         string(
@@ -41,8 +45,8 @@ pipeline {
                         'AmazonWebServicesCredentialsBinding',
                         credentialsId: 'ai-research-saama']]){
                         sh '''
-                            aws ecr get-login-password --region ${Source_AWS_Region} | docker login --username AWS --password-stdin ${AI_RESEARCH_SAAMA}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
-                            docker pull ${AI_RESEARCH_SAAMA}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag}
+                            aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin ${AI_RESEARCH_SAAMA}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
+                            podman pull ${AI_RESEARCH_SAAMA}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag}
                             echo ${AI_RESEARCH_SAAMA}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag} > test.txt
                             unset AWS_ACCESS_KEY_ID
                             unset AWS_SECRET_ACCESS_KEY 
@@ -54,8 +58,8 @@ pipeline {
                         'AmazonWebServicesCredentialsBinding',
                         credentialsId: 'lsacone-dev']]){
                         sh '''
-                            aws ecr get-login-password --region ${Source_AWS_Region} | docker login --username AWS --password-stdin ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
-                            docker pull ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag}
+                            aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
+                            podman pull ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag}
                             echo ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag} > test.txt
                             unset AWS_ACCESS_KEY_ID
                             unset AWS_SECRET_ACCESS_KEY                        
@@ -73,10 +77,10 @@ pipeline {
                         'AmazonWebServicesCredentialsBinding',
                         credentialsId: 'ai-research-saama']]){
                         sh '''
-                            docker tag $(cat test.txt) ${AI_RESEARCH_SAAMA}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
-                            aws ecr get-login-password --region ${Source_AWS_Region} | docker login --username AWS --password-stdin ${AI_RESEARCH_SAAMA}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
-                            docker push ${AI_RESEARCH_SAAMA}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
-                            docker rmi ${AI_RESEARCH_SAAMA}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
+                            podman tag $(cat test.txt) ${AI_RESEARCH_SAAMA}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
+                            aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin ${AI_RESEARCH_SAAMA}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
+                            podman push ${AI_RESEARCH_SAAMA}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
+                            podman rmi ${AI_RESEARCH_SAAMA}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
                             unset AWS_ACCESS_KEY_ID
                             unset AWS_SECRET_ACCESS_KEY                        
                         '''
@@ -86,10 +90,10 @@ pipeline {
                         'AmazonWebServicesCredentialsBinding',
                         credentialsId: 'lsacone-dev']]){
                         sh '''
-                            docker tag $(cat test.txt) ${LSACONE_DEV}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
-                            aws ecr get-login-password --region ${Source_AWS_Region} | docker login --username AWS --password-stdin ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
-                            docker push ${LSACONE_DEV}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
-                            docker rmi ${LSACONE_DEV}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
+                            podman tag $(cat test.txt) ${LSACONE_DEV}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
+                            aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
+                            podman push ${LSACONE_DEV}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
+                            podman rmi ${LSACONE_DEV}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
                             unset AWS_ACCESS_KEY_ID
                             unset AWS_SECRET_ACCESS_KEY                        
                         '''
