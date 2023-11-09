@@ -1,7 +1,7 @@
 pipeline {
-    agent {
+agent {
     kubernetes {
-      yamlFile 'AgentPod.yaml'
+      yamlFile 'deploy/AgentPod.yaml'
         }
     }
     parameters {
