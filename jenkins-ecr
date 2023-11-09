@@ -1,8 +1,8 @@
 pipeline {
-agent {
-    kubernetes {
-      yamlFile 'deploy/AgentPod.yaml'
-        }
+    agent {
+     kubernetes {
+       yamlFile 'deploy/AgentPod.yaml'
+         }
     }
     environment{
         AI_RESEARCH_SAAMA = '381743254372'
