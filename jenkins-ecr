@@ -44,7 +44,9 @@ pipeline {
                     if (params.SOURCE_AWS_ACCOUNT == 'ai-research-saama') {
                         withCredentials([[$class:
                         'AmazonWebServicesCredentialsBinding',
-                        credentialsId: 'app.jenkins.ecr-migration']]){
+                        credentialsId: 'app.jenkins.ecr-migration']])
+                        withAWS(roleAccount: '381743254372', role: 'arn:aws:iam::381743254372:role/app.jenkins.ecr-migration.role')
+                        {
                         sh '''
                             aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin ${AI_RESEARCH_SAAMA}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
                             podman pull ${AI_RESEARCH_SAAMA}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag}
@@ -78,7 +80,9 @@ pipeline {
                     if (params.DESTINATION_AWS_ACCOUNT == 'ai-research-saama') {
                         withCredentials([[$class:
                         'AmazonWebServicesCredentialsBinding',
-                        credentialsId: 'app.jenkins.ecr-migration']]){
+                        credentialsId: 'app.jenkins.ecr-migration']])
+                        withAWS(roleAccount: '381743254372', role: 'arn:aws:iam::381743254372:role/app.jenkins.ecr-migration.role')
+                        {
                         sh '''                      
                             podman tag $(cat test.txt) ${AI_RESEARCH_SAAMA}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
                             aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin ${AI_RESEARCH_SAAMA}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
@@ -93,7 +97,7 @@ pipeline {
                         'AmazonWebServicesCredentialsBinding',
                         credentialsId: 'app.jenkins.ecr-migration']]){
                         sh '''
-                    aws ecr describe-images --repository-name ${Destination_ECR_Repo} > new.txt
+                    aws ecr describe-images --repository-name ${Destination_ECR_Repo} --region ${Destination_AWS_Region}  > new.txt
                     if grep -wq "${Source_Image_Tag}" new.txt; 
                     then 
                         echo "Image already Exists" 
