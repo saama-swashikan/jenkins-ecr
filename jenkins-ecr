@@ -62,7 +62,9 @@ pipeline {
                     apt install -y jq
                         aws ecr describe-images --repository-name ${Source_ECR_Repo} --image-ids imageTag=${Source_Image_Tag} --region ${Source_AWS_Region} --output json | jq length > new.txt
                     cat new.txt > new
-                    if [ new == 1 ]
+                    new=$(cat new.txt)
+                    echo $new
+                    if [ $new -eq 1 ]
                     then  
                             aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
                             podman pull ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag}
