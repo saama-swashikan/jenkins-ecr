@@ -47,7 +47,7 @@ pipeline {
                         credentialsId: 'app.jenkins.ecr-migration']]){
                         sh '''
                             ls -lart
-                            apt-get install -y aws podman
+                            sudo apt-get install -y aws podman
                             aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin ${AI_RESEARCH_SAAMA}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
                             podman pull ${AI_RESEARCH_SAAMA}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag}
                             echo ${AI_RESEARCH_SAAMA}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag} > test.txt
