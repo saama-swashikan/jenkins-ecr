@@ -20,8 +20,16 @@ pipeline {
                         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                     ]]) {
                         withAWS(roleAccount: '381743254372', role: 'arn:aws:iam::381743254372:role/app.jenkins.ecr-migration.role') {
-                            // Your AWS CLI commands or AWS SDK operations here
-                            sh 'aws s3 ls'  // Example command, replace with your actual AWS commands
+                            sh '''
+                                for id in ${Source_Image_Tag[@]}; 
+                                do
+                                    aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
+                                    podman pull ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${id}
+                                    echo ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${id} > test.txt
+                                    unset AWS_ACCESS_KEY_ID
+                                    unset AWS_SECRET_ACCESS_KEY
+                                done                                                     
+                            '''                            
                         }
                     }
                 }
