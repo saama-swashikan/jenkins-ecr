@@ -1,10 +1,10 @@
 pipeline {
-    // agent {
-    //  kubernetes {
-    //    yamlFile 'deploy/AgentPod.yaml'
-    //      }
-    // }
-    agent any
+    agent {
+     kubernetes {
+       yamlFile 'deploy/AgentPod.yaml'
+         }
+    }
+    // agent any
     environment{
         AI_RESEARCH_SAAMA = '381743254372'
         LSACONE_DEV = '791532114280'
