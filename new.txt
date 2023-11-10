@@ -1,3 +1,5 @@
+IMAGEDETAILS	application/vnd.docker.container.image.v1+json	sha256:5428e855c06ff433f643c8573c78ec5ecfcf8c0cafb9bf87101c7f9e4c230d38	application/vnd.docker.distribution.manifest.v2+json	1699606255.0	931107886	1699606255.563	791532114280	swashikan
 IMAGETAGS	new2
-IMAGETAGS	new
+IMAGETAGS	n
+IMAGEDETAILS	application/vnd.docker.container.image.v1+json	sha256:8df5aad742eb36e26ab7c2ece50d17fa5cd79234e6098e0e65fa929629e5e5b7	application/vnd.docker.distribution.manifest.v2+json	1699602850.0	931107886	1699602851.336	791532114280	swashikan
 IMAGETAGS	lsacone
