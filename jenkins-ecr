@@ -9,7 +9,7 @@ pipeline {
         LSACONE_DEV = '791532114280'
     }
     parameters {
-        choice(name: 'SOURCE_AWS_ACCOUNT', choices:'ai-research-saama\nlsacone-dev', description:'Select Source AWS Account')
+        choice(name: 'SOURCE_AWS_ACCOUNT', choices:'ai-research-saama\nlsacone-dev\nsdq-sam', description:'Select Source AWS Account')
         string(
             name: 'Source_AWS_Region',
             description: "mention the Source aws account region which will be as 'ap-south-1' "
@@ -71,7 +71,7 @@ pipeline {
                             '''
                             }
                         }
-                        } else if (params.SOURCE_AWS_ACCOUNT == 'ai-research-saama') {
+                        } else if (params.SOURCE_AWS_ACCOUNT == 'sdq-sam') {
                             withCredentials([[
                             $class: 'AmazonWebServicesCredentialsBinding',
                             credentialsId: 'app.jenkins.ecr-migration',
