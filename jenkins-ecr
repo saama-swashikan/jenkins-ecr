@@ -59,13 +59,11 @@ pipeline {
                         'AmazonWebServicesCredentialsBinding',
                         credentialsId: 'app.jenkins.ecr-migration']]){
                         sh '''
-                    apt install -y jq
-                    #def imageExists = sh (script: """
-                    #    aws ecr describe-images --repository-name ${Destination_ECR_Repo} --image-ids imageTag=${Destination_Image_Tag} --output json | jq length
-                    #""", returnStatus: true) == 0
-                    if ((script: """
-                        aws ecr describe-images --repository-name ${Destination_ECR_Repo} --image-ids imageTag=${Destination_Image_Tag} --output json | jq length
-                    """, returnStatus: true) == 0) {   
+                    #apt install -y jq
+
+                        aws ecr describe-images --repository-name ${Destination_ECR_Repo} --image-ids imageTag=${Destination_Image_Tag} --output json | jq length > new.txt
+                    cat new.txt
+                    if (new) {   
                             aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
                             podman pull ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag}
                             echo ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag} > test.txt
