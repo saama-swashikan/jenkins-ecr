@@ -19,7 +19,7 @@ pipeline {
             name: 'Source_ECR_Repo',
             description: "mention the Source aws ecr repo name which will be as 'sam-kt-ecr' "
         )
-        text(
+        string(
             name: 'Source_Image_Tag',
             description: "mention the Source aws Image Tag which will be as 'tag-213-23234-3' "
         )        
@@ -32,7 +32,7 @@ pipeline {
             name: 'Destination_ECR_Repo',
             description: "mention the Destination aws ecr repo name which will be as 'sam-kt-ecr' "
         )
-        text(
+        string(
             name: 'Destination_Image_Tag',
             description: "mention the Destination aws Image Tag which will be as 'tag-213-23234-3' "
         )             
