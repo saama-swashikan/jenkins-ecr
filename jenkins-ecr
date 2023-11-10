@@ -23,7 +23,7 @@ pipeline {
             name: 'Source_Image_Tag',
             description: "mention the Source aws Image Tag which will be as 'tag-213-23234-3' "
         )        
-        choice(name: 'DESTINATION_AWS_ACCOUNT', choices:'ai-research-saama\nlsacone-dev', description:'Select Destination AWS Account')
+        choice(name: 'DESTINATION_AWS_ACCOUNT', choices:'ai-research-saama\nlsacone-dev\nsdq-sam', description:'Select Destination AWS Account')
         string(
             name: 'Destination_AWS_Region',
             description: "mention the Destination aws account region which will be as 'ap-south-1' "
