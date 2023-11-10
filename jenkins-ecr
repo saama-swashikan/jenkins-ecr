@@ -46,11 +46,6 @@ pipeline {
                         'AmazonWebServicesCredentialsBinding',
                         credentialsId: 'app.jenkins.ecr-migration']]){
                         sh '''
-                            ASSUME_ROLE_OUTPUT=$(aws sts assume-role --role-arn arn:aws:iam::381743254372:role/app.jenkins.ecr-migration.role --role-session-name jenkins)
-ASSUME_ROLE_ENVIRONMENT=$(echo $ASSUME_ROLE_OUTPUT | jq -r '.Credentials | .["AWS_ACCESS_KEY_ID"] = .AccessKeyId | .["AWS_SECRET_ACCESS_KEY"] = .SecretAccessKey | .["AWS_SESSION_TOKEN"] = .SessionToken | del(.AccessKeyId, .SecretAccessKey, .SessionToken, .Expiration)
- | to_entries[] | "export \(.key)=\(.value)"')
-eval $ASSUME_ROLE_ENVIRONMENT
-aws s3 ls
                             ls -lart
                             sudo apt-get install -y aws podman
                             aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin ${AI_RESEARCH_SAAMA}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
@@ -84,12 +79,7 @@ aws s3 ls
                         withCredentials([[$class:
                         'AmazonWebServicesCredentialsBinding',
                         credentialsId: 'app.jenkins.ecr-migration']]){
-                        sh '''
-                            ASSUME_ROLE_OUTPUT=$(aws sts assume-role --role-arn arn:aws:iam::381743254372:role/app.jenkins.ecr-migration.role --role-session-name jenkins)
-ASSUME_ROLE_ENVIRONMENT=$(echo $ASSUME_ROLE_OUTPUT | jq -r '.Credentials | .["AWS_ACCESS_KEY_ID"] = .AccessKeyId | .["AWS_SECRET_ACCESS_KEY"] = .SecretAccessKey | .["AWS_SESSION_TOKEN"] = .SessionToken | del(.AccessKeyId, .SecretAccessKey, .SessionToken, .Expiration)
- | to_entries[] | "export \(.key)=\(.value)"')
-eval $ASSUME_ROLE_ENVIRONMENT
-aws s3 ls                            
+                        sh '''                      
                             podman tag $(cat test.txt) ${AI_RESEARCH_SAAMA}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
                             aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin ${AI_RESEARCH_SAAMA}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
                             podman push ${AI_RESEARCH_SAAMA}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
