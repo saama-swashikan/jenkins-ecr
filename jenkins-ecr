@@ -60,8 +60,8 @@ pipeline {
                         credentialsId: 'app.jenkins.ecr-migration']]){
                         sh '''
                     apt install -y jq
-                    echo $(aws ecr describe-images --repository-name swashikan --region us-east-1 --output json | jq -r '.imageDetails.[].imageTags.[]') > new.txt
-                    if grep -wq "new" new.txt; 
+                    echo $(aws ecr describe-images --repository-name swashikan --region us-east-1 --output json | jq -r \'.imageDetails.[].imageTags.[]\') > new.txt
+                    if grep -wq "${Source_Image_Tag}" new.txt; 
                     then 
                         echo "Exists" 
                             aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
