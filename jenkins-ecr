@@ -93,7 +93,7 @@ pipeline {
                         'AmazonWebServicesCredentialsBinding',
                         credentialsId: 'app.jenkins.ecr-migration']]){
                         sh '''
-                    aws ecr describe-images --repository-name ${Destination_ECR_Repo} --region ${Destination_AWS_Region}  > new.txt
+                    aws ecr describe-images --repository-name ${Destination_ECR_Repo} > new.txt
                     if grep -wq "${Source_Image_Tag}" new.txt; 
                     then 
                         echo "Image already Exists" 
