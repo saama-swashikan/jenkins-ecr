@@ -80,9 +80,8 @@ pipeline {
                     if (params.DESTINATION_AWS_ACCOUNT == 'ai-research-saama') {
                         withCredentials([[$class:
                         'AmazonWebServicesCredentialsBinding',
-                        credentialsId: 'app.jenkins.ecr-migration']])
-                        withAWS(roleAccount: '381743254372', role: 'arn:aws:iam::381743254372:role/app.jenkins.ecr-migration.role')
-                        {
+                        credentialsId: 'app.jenkins.ecr-migration']]) {
+                        withAWS(roleAccount: '381743254372', role: 'arn:aws:iam::381743254372:role/app.jenkins.ecr-migration.role') {
                         sh '''                      
                             podman tag $(cat test.txt) ${AI_RESEARCH_SAAMA}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
                             aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin ${AI_RESEARCH_SAAMA}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
@@ -91,6 +90,7 @@ pipeline {
                             unset AWS_ACCESS_KEY_ID
                             unset AWS_SECRET_ACCESS_KEY                        
                         '''
+                        }
                         }
                     } else if (params.DESTINATION_AWS_ACCOUNT == 'lsacone-dev') {
                          withCredentials([[$class:
