@@ -59,7 +59,7 @@ pipeline {
                         'AmazonWebServicesCredentialsBinding',
                         credentialsId: 'app.jenkins.ecr-migration']]){
                         sh '''
-                    #apt install -y jq
+                    apt install -y jq
 
                         aws ecr describe-images --repository-name ${Destination_ECR_Repo} --image-ids imageTag=${Destination_Image_Tag} --output json | jq length > new.txt
                     cat new.txt
