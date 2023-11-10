@@ -49,7 +49,8 @@ pipeline {
     stages{
         stage('Pull Source Image'){
             steps{
-                container('swashikan') script{
+                container('swashikan'){
+                script{
                     if (params.SOURCE_AWS_ACCOUNT == 'ai-research-saama') {
                         withCredentials([[$class:
                         'AmazonWebServicesCredentialsBinding',
@@ -83,9 +84,11 @@ pipeline {
                 }
             }
         }
+    }
         stage('Push Destination Image'){
             steps{
-                container('swashikan') script{
+                container('swashikan'){
+                script{
                     if (params.DESTINATION_AWS_ACCOUNT == 'ai-research-saama') {
                         withCredentials([[$class:
                         'AmazonWebServicesCredentialsBinding',
@@ -117,4 +120,5 @@ pipeline {
             }
         }
     }       
+}
 }
