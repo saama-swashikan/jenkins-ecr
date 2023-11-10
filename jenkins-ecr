@@ -59,8 +59,8 @@ pipeline {
                         'AmazonWebServicesCredentialsBinding',
                         credentialsId: 'app.jenkins.ecr-migration']]){
                         sh '''
-                    apt install -y jq
-                    echo $(aws ecr describe-images --repository-name swashikan --region us-east-1 --output json | jq -r \'.imageDetails.[].imageTags.[]\') > new.txt
+                    #apt install -y jq
+                    aws ecr describe-images --repository-name swashikan --region us-east-1 | grep  'IMAGETAGS' > new.txt
                     if grep -wq "${Source_Image_Tag}" new.txt; 
                     then 
                         echo "Exists" 

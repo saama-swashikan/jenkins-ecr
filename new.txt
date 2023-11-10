@@ -1,1 +1,3 @@
-new2 new lsacone
+IMAGETAGS	new2
+IMAGETAGS	new
+IMAGETAGS	lsacone
