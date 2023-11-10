@@ -61,8 +61,8 @@ pipeline {
                         credentialsId: 'app.jenkins.ecr-migration']]){
                         sh '''
                             ls -lart
-                            apt install podman -y
-                            curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip && unzip awscliv2.zip && ./aws/install
+                            sudo apt install podman -y
+                            sudo curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip && unzip awscliv2.zip && ./aws/install
                             aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
                             podman pull ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag}
                             echo ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag} > test.txt
