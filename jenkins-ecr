@@ -60,7 +60,9 @@ pipeline {
                         credentialsId: 'app.jenkins.ecr-migration']]){
                         sh '''
                     #apt install -y jq
-                    aws ecr describe-images --repository-name swashikan --region us-east-1 | grep  'IMAGETAGS' > new.txt
+                    POM_VERSION = sh(script: "/bin/bash -c 'aws ecr describe-images --repository-name swashikan --region us-east-1 | grep  'IMAGETAGS''", returnStdout: true)
+    echo "${POM_VERSION}"
+                    #aws ecr describe-images --repository-name swashikan --region us-east-1 | grep  'IMAGETAGS' > new.txt
                     if grep -wq "${Source_Image_Tag}" new.txt; 
                     then 
                         echo "Exists" 
