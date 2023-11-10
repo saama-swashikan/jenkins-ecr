@@ -5,7 +5,7 @@ metadata:
 spec:
   containers:
   - name: sch-code-builder
-    image: 791532114280.dkr.ecr.us-east-1.amazonaws.com/sch-build-agent:sch-sit2-final234
+    image: 791532114280.dkr.ecr.us-east-1.amazonaws.com/lsac-platform:ubuntu_3
     resources:
         limits:
           cpu: "500m"
