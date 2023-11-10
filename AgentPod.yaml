@@ -16,11 +16,11 @@ spec:
     workingDir: /home/node/jenkins 
     command:
     - cat
-  #   tty: true
-  #   volumeMounts:
-  #     - mountPath: "/home/node/jenkins"
-  #       name: "workspace-volume"
-  #       readOnly: false
+    tty: true
+    volumeMounts:
+      - mountPath: "/home/node/jenkins"
+        name: "workspace-volume"
+        readOnly: false
   # volumes:
   #   - name: docker-config
   #     configMap:
