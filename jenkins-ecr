@@ -99,7 +99,21 @@ pipeline {
             steps{
                 container('swashikan'){
                     script{
-                        if (params.DESTINATION_AWS_ACCOUNT == 'ai-research-saama') {
+                        if (params.DESTINATION_AWS_ACCOUNT == 'lsacone-dev') {
+                            withCredentials([[$class:
+                            'AmazonWebServicesCredentialsBinding',
+                            credentialsId: 'app.jenkins.ecr-migration']]){
+                            sh '''
+                                    aws ecr describe-images --repository-name ${Destination_ECR_Repo} --region ${Destination_AWS_Region}  > new.txt
+                                    podman tag $(cat test.txt) ${LSACONE_DEV}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
+                                    aws ecr get-login-password --region ${Destination_AWS_Region} | podman login --username AWS --password-stdin ${LSACONE_DEV}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com
+                                    podman push ${LSACONE_DEV}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
+                                    podman image prune --all --force
+                                    unset AWS_ACCESS_KEY_ID
+                                    unset AWS_SECRET_ACCESS_KEY                   
+                            '''
+                            }                       
+                        } else if (params.DESTINATION_AWS_ACCOUNT == 'ai-research-saama') {
                             withCredentials([[
                             $class: 'AmazonWebServicesCredentialsBinding',
                             credentialsId: 'app.jenkins.ecr-migration',
@@ -109,7 +123,7 @@ pipeline {
                             withAWS(roleAccount: '381743254372', role: 'arn:aws:iam::381743254372:role/app.jenkins.ecr-migration.role') {
                             sh '''                   
                                     podman tag $(cat test.txt) ${AI_RESEARCH_SAAMA}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
-                                    aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin ${AI_RESEARCH_SAAMA}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
+                                    aws ecr get-login-password --region ${Destination_AWS_Region} | podman login --username AWS --password-stdin ${AI_RESEARCH_SAAMA}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com
                                     podman push ${AI_RESEARCH_SAAMA}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
                                     podman image prune --all --force
                                     unset AWS_ACCESS_KEY_ID
@@ -117,25 +131,24 @@ pipeline {
                             '''
                             }
                         }
-                        } else if (params.DESTINATION_AWS_ACCOUNT == 'lsacone-dev') {
-                            withCredentials([[$class:
-                            'AmazonWebServicesCredentialsBinding',
-                            credentialsId: 'app.jenkins.ecr-migration']]){
-                            sh '''
-                                aws ecr describe-images --repository-name ${Destination_ECR_Repo} --region ${Destination_AWS_Region}  > new.txt
-                                if grep -wq "${Source_Image_Tag}" new.txt; 
-                                then 
-                                    echo "Image already Exists" 
-                                else
-                                    podman tag $(cat test.txt) ${LSACONE_DEV}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
-                                    aws ecr get-login-password --region ${Destination_AWS_Region} | podman login --username AWS --password-stdin ${LSACONE_DEV}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com
-                                    podman push ${LSACONE_DEV}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
+                        } else if (params.DESTINATION_AWS_ACCOUNT == 'sdq-sam') {
+                            withCredentials([[
+                            $class: 'AmazonWebServicesCredentialsBinding',
+                            credentialsId: 'app.jenkins.ecr-migration',
+                            accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                            secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                        ]]) {
+                            withAWS(roleAccount: '351054065682', role: 'arn:aws:iam::351054065682:role/app.jenkins.ecr-migration.role') {
+                            sh '''                   
+                                    podman tag $(cat test.txt) ${SDQ_SAM}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
+                                    aws ecr get-login-password --region ${Destination_AWS_Region} | podman login --username AWS --password-stdin ${SDQ_SAM}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com
+                                    podman push ${SDQ_SAM}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
                                     podman image prune --all --force
                                     unset AWS_ACCESS_KEY_ID
-                                    unset AWS_SECRET_ACCESS_KEY
-                                fi                   
+                                    unset AWS_SECRET_ACCESS_KEY                      
                             '''
-                            }                       
+                            }
+                        }
                         }
                     }
                 }
