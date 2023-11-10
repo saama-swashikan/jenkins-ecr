@@ -43,7 +43,7 @@ pipeline {
                     if (params.SOURCE_AWS_ACCOUNT == 'ai-research-saama') {
                         withCredentials([[$class:
                         'AmazonWebServicesCredentialsBinding',
-                        credentialsId: 'ai-research-saama']]){
+                        credentialsId: 'app.jenkins.ecr-migration']]){
                         sh '''
                             ls -lart
                             aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin ${AI_RESEARCH_SAAMA}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
@@ -57,7 +57,7 @@ pipeline {
                     } else if (params.SOURCE_AWS_ACCOUNT == 'lsacone-dev') {
                          withCredentials([[$class:
                         'AmazonWebServicesCredentialsBinding',
-                        credentialsId: 'lsacone-dev']]){
+                        credentialsId: 'app.jenkins.ecr-migration']]){
                         sh '''
                             aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
                             podman pull ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag}
@@ -76,7 +76,7 @@ pipeline {
                     if (params.DESTINATION_AWS_ACCOUNT == 'ai-research-saama') {
                         withCredentials([[$class:
                         'AmazonWebServicesCredentialsBinding',
-                        credentialsId: 'ai-research-saama']]){
+                        credentialsId: 'app.jenkins.ecr-migration']]){
                         sh '''
                             podman tag $(cat test.txt) ${AI_RESEARCH_SAAMA}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
                             aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin ${AI_RESEARCH_SAAMA}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
@@ -89,7 +89,7 @@ pipeline {
                     } else if (params.DESTINATION_AWS_ACCOUNT == 'lsacone-dev') {
                          withCredentials([[$class:
                         'AmazonWebServicesCredentialsBinding',
-                        credentialsId: 'lsacone-dev']]){
+                        credentialsId: 'app.jenkins.ecr-migration']]){
                         sh '''
                             podman tag $(cat test.txt) ${LSACONE_DEV}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
                             aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
