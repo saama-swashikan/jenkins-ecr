@@ -19,9 +19,9 @@ spec:
     tty: true
     volumeMounts:
       - mountPath: "/home/node/jenkins"
-        name: "swashikan-volume"
+        name: "workspace-volume"
         readOnly: false
-  # volumes:
-  #   - name: docker-config
-  #     configMap:
-  #       name: docker-config
+  volumes:
+    - name: docker-config
+      configMap:
+        name: docker-config
