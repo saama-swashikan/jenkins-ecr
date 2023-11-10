@@ -78,7 +78,7 @@ pipeline {
                             accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                             secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                         ]]) {
-                            withAWS(roleAccount: '381743254372', role: 'arn:aws:iam::381743254372:role/app.jenkins.ecr-migration.role') {
+                            withAWS(roleAccount: '351054065682', role: 'arn:aws:iam::351054065682:role/app.jenkins.ecr-migration.role') {
                             sh '''
                                 aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin ${AI_RESEARCH_SAAMA}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
                                 podman pull ${AI_RESEARCH_SAAMA}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag}
