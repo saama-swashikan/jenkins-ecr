@@ -60,7 +60,7 @@ pipeline {
                         credentialsId: 'app.jenkins.ecr-migration']]){
                         sh '''
                     apt install -y jq
-                    aws ecr describe-images --repository-name swashikan --region us-east-1 --output json | jq -r '.imageDetails.[].imageTags.[]' > new.txt
+                    echo $(aws ecr describe-images --repository-name swashikan --region us-east-1 --output json | jq -r '.imageDetails.[].imageTags.[]') > new.txt
                     if grep -wq "new" new.txt; 
                     then 
                         echo "Exists" 
