@@ -121,7 +121,7 @@ pipeline {
                                     podman push ${LSACONE_DEV}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
                                     unset AWS_ACCESS_KEY_ID
                                     unset AWS_SECRET_ACCESS_KEY
-                                    echo "$(tail -n +2 images.txt)" > images.txt                 
+                                    tail -n +2 images.txt > images.txt                                       
                                 """
                                 }                       
                             } else if (params.DESTINATION_AWS_ACCOUNT == 'ai-research-saama') {
@@ -139,7 +139,7 @@ pipeline {
                                     podman push ${AI_RESEARCH_SAAMA}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
                                     unset AWS_ACCESS_KEY_ID
                                     unset AWS_SECRET_ACCESS_KEY
-                                    echo "$(tail -n +2 images.txt)" > images.txt                                       
+                                    tail -n +2 images.txt > images.txt                                       
                                 """
                                 }
                             }
@@ -158,7 +158,7 @@ pipeline {
                                     podman push ${SDQ_SAM}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
                                     unset AWS_ACCESS_KEY_ID
                                     unset AWS_SECRET_ACCESS_KEY
-                                    echo "$(tail -n +2 images.txt)" > images.txt                 
+                                    tail -n +2 images.txt > images.txt                                       
                                 """
                                 }
                             }
