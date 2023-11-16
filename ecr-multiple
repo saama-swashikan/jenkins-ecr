@@ -38,7 +38,7 @@ pipeline {
             description: "mention the Destination aws ecr repo name which will be as 'sam-kt-ecr' "
         )
         text(
-            name: 'Destination_Image_Tag',
+            name: 'Destination_Image_Tags',
             description: "mention the Destination aws Image Tag which will be as 'tag-213-23234-3' "
         )             
     }
