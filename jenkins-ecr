@@ -67,7 +67,8 @@ pipeline {
                                         podman pull ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag}
                                         echo ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag} >> images.txt
                                         unset AWS_ACCESS_KEY_ID
-                                        unset AWS_SECRET_ACCESS_KEY                                                    
+                                        unset AWS_SECRET_ACCESS_KEY
+                                        cat images.txt
                                     """
                                 }                       
                             } else if (params.SOURCE_AWS_ACCOUNT == 'ai-research-saama') {
@@ -101,7 +102,8 @@ pipeline {
                                             podman pull ${SDQ_SAM}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag}
                                             echo ${SDQ_SAM}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag} >> images.txt
                                             unset AWS_ACCESS_KEY_ID 
-                                            unset AWS_SECRET_ACCESS_KEY 
+                                            unset AWS_SECRET_ACCESS_KEY
+                                            cat images.txt
                                         """
                                     }
                                 }
@@ -152,6 +154,7 @@ pipeline {
                                             podman push ${AI_RESEARCH_SAAMA}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
                                             unset AWS_ACCESS_KEY_ID
                                             unset AWS_SECRET_ACCESS_KEY
+                                            cat images.txt
                                             tail -n +2 images.txt > tmp.txt && mv tmp.txt images.txt
                                             cat images.txt                                       
                                         """
@@ -173,6 +176,7 @@ pipeline {
                                             podman push ${SDQ_SAM}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
                                             unset AWS_ACCESS_KEY_ID
                                             unset AWS_SECRET_ACCESS_KEY
+                                            cat images.txt
                                             tail -n +2 images.txt > tmp.txt && mv tmp.txt images.txt
                                             cat images.txt                                       
                                         """
