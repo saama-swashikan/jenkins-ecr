@@ -114,7 +114,7 @@ pipeline {
                                 $class: 'AmazonWebServicesCredentialsBinding',
                                 credentialsId: 'app.jenkins.ecr-migration'
                                 ]]) {
-                                SOURCE_TAG = $(cat images.txt | head -1)    
+                                sh 'SOURCE_TAG=$(head -n 1 images.txt)'   
                                 sh """
                                     podman ${SOURCE_TAG} ${LSACONE_DEV}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
                                     echo ${LSACONE_DEV}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
