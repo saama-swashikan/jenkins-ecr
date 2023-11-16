@@ -47,6 +47,10 @@ pipeline {
             steps{
                 container('swashikan'){
                     script{
+                        def files = params.Source_Image_Tag
+                        for (file in files) {
+                            echo "Preparing $file"
+                        }
                         data.each {val->  
                          println("the fruit name is " + val)
                         }
