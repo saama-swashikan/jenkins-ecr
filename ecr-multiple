@@ -47,7 +47,8 @@ pipeline {
             steps{
                 container('swashikan'){
                     script{
-                        def files = params.Source_Image_Tag
+                        def files = params.Source_Image_Tag.split('\n')
+                        
                         for (file in files) {
                             echo "Preparing $file"
                         }
