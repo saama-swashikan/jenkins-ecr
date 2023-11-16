@@ -1,3 +1,4 @@
+def data = [ "apple","orange" ] 
 pipeline {
     agent {
      kubernetes {
@@ -46,6 +47,9 @@ pipeline {
             steps{
                 container('swashikan'){
                     script{
+                        data.each {val->  
+                         println("the fruit name is " + val)
+                        }
                         if (params.SOURCE_AWS_ACCOUNT == 'lsacone-dev') {
                             withCredentials([[
                             $class: 'AmazonWebServicesCredentialsBinding',
