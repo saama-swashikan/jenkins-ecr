@@ -21,7 +21,7 @@ pipeline {
         )
         text(
             name: 'Source_Image_Tags',
-            description: "mention the Source aws Image Tag which will be as: \ntag-213-23234-3\ntag-456032434\ntag-5643-344-425 "
+            description: "mention the Source aws Image Tag which will be as: \ntag-213-23234-3\ntag-456032434\ntag-5643-344-425 \nMake Sure There is no space at the end of each line "
         )  
 
 
@@ -41,7 +41,7 @@ pipeline {
         )
         text(
             name: 'Destination_Image_Tags',
-            description: "mention the Destination aws Image Tag which will be as: \ntag-213-23234-3\ntag-456032434\ntag-5643-344-425 "
+            description: "mention the Destination aws Image Tag which will be as: \ntag-213-23234-3\ntag-456032434\ntag-5643-344-425 \nMake Sure There is no space at the end of each line "
         )             
     }
     stages{
