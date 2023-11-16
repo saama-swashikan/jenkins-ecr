@@ -1,4 +1,3 @@
-def data = [ "apple","orange" ] 
 pipeline {
     agent {
      kubernetes {
@@ -58,7 +57,7 @@ pipeline {
                                 sh """
                                     aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
                                     podman pull ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag}
-                                    echo ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag}
+                                    echo ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag} >> images.txt
                                     unset AWS_ACCESS_KEY_ID
                                     unset AWS_SECRET_ACCESS_KEY                                                    
                                 """
@@ -74,7 +73,7 @@ pipeline {
                                 sh """
                                     aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin ${AI_RESEARCH_SAAMA}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
                                     podman pull ${AI_RESEARCH_SAAMA}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag}
-                                    echo ${AI_RESEARCH_SAAMA}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag}
+                                    echo ${AI_RESEARCH_SAAMA}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag} >> images.txt
                                     unset AWS_ACCESS_KEY_ID
                                     unset AWS_SECRET_ACCESS_KEY 
                                 """
@@ -91,7 +90,8 @@ pipeline {
                                 sh """
                                     aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin ${SDQ_SAM}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
                                     podman pull ${SDQ_SAM}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag}
-                                    echo ${SDQ_SAM}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag}
+                                    echo ${SDQ_SAM}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag} >> images.txt
+                                    unset AWS_ACCESS_KEY_ID 
                                     unset AWS_SECRET_ACCESS_KEY 
                                 """
                                 }
@@ -109,17 +109,19 @@ pipeline {
                         def filess = params.Destination_Image_Tags.split('\n')                    
                         for (Destination_Image_Tag in filess) {
                             echo "Pushing ${Destination_Image_Tag}"
+                            echo "Pushing ${Source_Image_Tag}"
                             if (params.DESTINATION_AWS_ACCOUNT == 'lsacone-dev') {
                                 withCredentials([[
                                 $class: 'AmazonWebServicesCredentialsBinding',
                                 credentialsId: 'app.jenkins.ecr-migration'
                                 ]]) {
                                 sh """
-                                    podman tag ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag} ${LSACONE_DEV}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
+                                    podman $(cat images.txt | head -1) ${LSACONE_DEV}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
                                     aws ecr get-login-password --region ${Destination_AWS_Region} | podman login --username AWS --password-stdin ${LSACONE_DEV}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com
                                     podman push ${LSACONE_DEV}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
                                     unset AWS_ACCESS_KEY_ID
-                                    unset AWS_SECRET_ACCESS_KEY                   
+                                    unset AWS_SECRET_ACCESS_KEY
+                                    echo "$(tail -n +2 images.txt)" > images.txt                 
                                 """
                                 }                       
                             } else if (params.DESTINATION_AWS_ACCOUNT == 'ai-research-saama') {
@@ -131,11 +133,12 @@ pipeline {
                                 ]]) {
                                 withAWS(roleAccount: '381743254372', role: 'arn:aws:iam::381743254372:role/app.jenkins.ecr-migration.role') {
                                 sh """                   
-                                    podman tag ${AI_RESEARCH_SAAMA}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag} ${AI_RESEARCH_SAAMA}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
+                                    podman tag $(cat images.txt | head -1) ${AI_RESEARCH_SAAMA}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
                                     aws ecr get-login-password --region ${Destination_AWS_Region} | podman login --username AWS --password-stdin ${AI_RESEARCH_SAAMA}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com
                                     podman push ${AI_RESEARCH_SAAMA}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
                                     unset AWS_ACCESS_KEY_ID
-                                    unset AWS_SECRET_ACCESS_KEY                      
+                                    unset AWS_SECRET_ACCESS_KEY
+                                    echo "$(tail -n +2 images.txt)" > images.txt                                       
                                 """
                                 }
                             }
@@ -148,11 +151,12 @@ pipeline {
                                 ]]) {
                                 withAWS(roleAccount: '351054065682', role: 'arn:aws:iam::351054065682:role/app.jenkins.ecr-migration.role') {
                                 sh """                   
-                                    podman tag ${SDQ_SAM}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag} ${SDQ_SAM}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
+                                    podman tag $(cat images.txt | head -1) ${SDQ_SAM}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
                                     aws ecr get-login-password --region ${Destination_AWS_Region} | podman login --username AWS --password-stdin ${SDQ_SAM}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com
                                     podman push ${SDQ_SAM}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
                                     unset AWS_ACCESS_KEY_ID
-                                    unset AWS_SECRET_ACCESS_KEY                      
+                                    unset AWS_SECRET_ACCESS_KEY
+                                    echo "$(tail -n +2 images.txt)" > images.txt                 
                                 """
                                 }
                             }
