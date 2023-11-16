@@ -25,7 +25,7 @@ pipeline {
         text(
             name: 'Source_Image_Tags',
             defaultValue: "redis",
-            description: "mention the Source aws Image Tag which will be as 'tag-213-23234-3\ntag-456032434' "
+            description: "mention the Source aws Image Tag which will be as '\ntag-213-23234-3\ntag-456032434' "
         )  
 
 
@@ -44,7 +44,7 @@ pipeline {
         text(
             name: 'Destination_Image_Tags',
             defaultValue: "sony",
-            description: "mention the Destination aws Image Tag which will be as 'tag-213-23234-3\ntag-456032434' "
+            description: "mention the Destination aws Image Tag which will be as '\ntag-213-23234-3\ntag-456032434' "
         )             
     }
     stages{
