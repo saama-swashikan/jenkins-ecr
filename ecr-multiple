@@ -114,10 +114,9 @@ pipeline {
                                 $class: 'AmazonWebServicesCredentialsBinding',
                                 credentialsId: 'app.jenkins.ecr-migration'
                                 ]]) {
-                                def SOURCE_TAG = sh(script: 'head -n 1 images.txt', returnStdout: true)
-                                def DESTINATION_TAG = sh(script: '${LSACONE_DEV}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}', returnStdout: true)   
+                                def SOURCE_TAG = sh(script: 'head -n 1 images.txt', returnStdout: true)   
                                 sh """
-                                    podman tag ${SOURCE_TAG} ${DESTINATION_TAG}
+                                    podman tag ${SOURCE_TAG} ${LSACONE_DEV}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
                                     echo ${LSACONE_DEV}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
                                     aws ecr get-login-password --region ${Destination_AWS_Region} | podman login --username AWS --password-stdin ${LSACONE_DEV}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com
                                     podman push ${LSACONE_DEV}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
