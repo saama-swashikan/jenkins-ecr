@@ -51,7 +51,7 @@ pipeline {
                         for (file in files) {
                             echo "Preparing $file"
                         }
-                        data.each {val->  
+                        files.each {val->  
                          println("the fruit name is " + val)
                         }
                         if (params.SOURCE_AWS_ACCOUNT == 'lsacone-dev') {
