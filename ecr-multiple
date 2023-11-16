@@ -82,6 +82,7 @@ pipeline {
                                     echo ${AI_RESEARCH_SAAMA}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag} >> images.txt
                                     unset AWS_ACCESS_KEY_ID
                                     unset AWS_SECRET_ACCESS_KEY 
+                                    cat images.txt
                                 """
                                 }
                             }
@@ -128,6 +129,7 @@ pipeline {
                                     podman push ${LSACONE_DEV}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
                                     unset AWS_ACCESS_KEY_ID
                                     unset AWS_SECRET_ACCESS_KEY
+                                    cat images.txt
                                     tail -n +2 images.txt > images.txt
                                     cat images.txt                                       
                                 """
