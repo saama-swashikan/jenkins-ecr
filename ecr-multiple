@@ -134,7 +134,7 @@ pipeline {
                                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                                 ]]) {
                                 withAWS(roleAccount: '381743254372', role: 'arn:aws:iam::381743254372:role/app.jenkins.ecr-migration.role') {
-                                sh 'SOURCE_TAG = $(cat images.txt | head -1)'
+                                sh 'SOURCE_TAG=$(head -n 1 images.txt)'
                                 sh """
                                     podman tag ${SOURCE_TAG} ${AI_RESEARCH_SAAMA}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}                   
                                     echo ${AI_RESEARCH_SAAMA}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
@@ -155,7 +155,7 @@ pipeline {
                                 secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                                 ]]) {
                                 withAWS(roleAccount: '351054065682', role: 'arn:aws:iam::351054065682:role/app.jenkins.ecr-migration.role') {
-                                sh 'SOURCE_TAG = $(cat images.txt | head -1)'
+                                sh 'SOURCE_TAG=$(head -n 1 images.txt)'
                                 sh """
                                     podman tag ${SOURCE_TAG} ${SDQ_SAM}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}                   
                                     echo ${SDQ_SAM}.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_ECR_Repo}:${Destination_Image_Tag}
