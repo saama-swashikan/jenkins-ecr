@@ -55,9 +55,10 @@ pipeline {
                                 $class: 'AmazonWebServicesCredentialsBinding',
                                 credentialsId: 'app.jenkins.ecr-migration'
                                 ]]) {
+                                echo "worling $Source_Image_Tag"
                                 sh '''
                                     aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com
-                                    podman pull ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag}
+                                    podman pull ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:$Source_Image_Tag
                                     echo ${LSACONE_DEV}.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_ECR_Repo}:${Source_Image_Tag} > test.txt
                                     unset AWS_ACCESS_KEY_ID
                                     unset AWS_SECRET_ACCESS_KEY                                                    
