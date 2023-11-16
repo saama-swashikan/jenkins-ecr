@@ -13,15 +13,15 @@ pipeline {
         
         string(
             name: 'Source_AWS_Region',
-            description: "mention the Source aws account region which will be as: \nus-east-1 "
+            description: "Mention the Source aws account region which will be as: \nus-east-1 "
         )
         string(
             name: 'Source_ECR_Repo',
-            description: "mention the Source aws ecr repo name which will be as: \nlsac-sit-sdq "
+            description: "Mention the Source aws ecr repo name which will be as: \nlsac-sit-sdq "
         )
         text(
             name: 'Source_Image_Tags',
-            description: "mention the Source aws Image Tag which will be as: \ntag-213-23234-3\ntag-456032434\ntag-5643-344-425 \nMake Sure There is no space at the end of each line "
+            description: "Mention the Source aws Image Tag which will be as: \ntag-213-23234-3\ntag-456032434\ntag-5643-344-425 \nMake Sure There is No Space at the end of each line "
         )  
 
 
@@ -33,15 +33,15 @@ pipeline {
         
         string(
             name: 'Destination_AWS_Region',
-            description: "mention the Destination aws account region which will be as: \nus-east-1 "
+            description: "Mention the Destination aws account region which will be as: \nus-east-1 "
         )
         string(
             name: 'Destination_ECR_Repo',
-            description: "mention the Destination aws ecr repo name which will be as: \nlsac-sit-sdq "
+            description: "Mention the Destination aws ecr repo name which will be as: \nlsac-sit-sdq "
         )
         text(
             name: 'Destination_Image_Tags',
-            description: "mention the Destination aws Image Tag which will be as: \ntag-213-23234-3\ntag-456032434\ntag-5643-344-425 \nMake Sure There is no space at the end of each line "
+            description: "Mention the Destination aws Image Tag which will be as: \ntag-213-23234-3\ntag-456032434\ntag-5643-344-425 \nMake Sure There is No Space at the end of each line "
         )             
     }
     stages{
