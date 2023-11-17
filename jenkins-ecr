@@ -43,7 +43,7 @@ pipeline {
                     script{
                         def files = params.Source_ECR_Repo_and_Image_Tags.split('\n')                    
                         for (Source_Image_Tag in files) {
-                            echo "Pulling ${Source_Image_Tag}"
+                            echo "Pulling ${Source_Image_Tag} on ${Source_AWS_Region}"
                             if (params.SOURCE_AWS_ACCOUNT == 'lsacone-dev') {
                                 withCredentials([[
                                 $class: 'AmazonWebServicesCredentialsBinding',
@@ -124,7 +124,7 @@ pipeline {
                     script{
                         def filess = params.Destination_ECR_Repo_and_Image_Tags.split('\n')                    
                         for (Destination_Image_Tag in filess) {
-                            echo "Pushing ${Destination_Image_Tag} to ${Destination_ECR_Repo} on ${Destination_AWS_Region}"
+                            echo "Pushing ${Destination_Image_Tag} on ${Destination_AWS_Region}"
                             if (params.DESTINATION_AWS_ACCOUNT == 'lsacone-dev') {
                                 withCredentials([[
                                 $class: 'AmazonWebServicesCredentialsBinding',
