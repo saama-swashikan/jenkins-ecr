@@ -13,7 +13,7 @@ pipeline {
         
         string(
             name: 'Source_AWS_Region',
-            description: "Mention the Source aws account region which will be as: \nus-east-1 "
+            description: "Mention the Source aws account region which will be as: \nap-south-1 "
         )
         text(
             name: 'Source_ECR_Repo_and_Image_Tags',
@@ -29,7 +29,7 @@ pipeline {
         
         string(
             name: 'Destination_AWS_Region',
-            description: "Mention the Destination aws account region which will be as: \nus-east-1 "
+            description: "Mention the Destination aws account region which will be as: \nap-south-1 "
         )
         text(
             name: 'Destination_ECR_Repo_and_Image_Tags',
