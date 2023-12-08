@@ -13,6 +13,7 @@ pipeline {
         
         string(
             name: 'Source_AWS_Region',
+            defaultValue: 'us-east-1',
             description: "Mention the Source aws account region which will be as: \nap-south-1 "
         )
         text(
@@ -29,6 +30,7 @@ pipeline {
         
         string(
             name: 'Destination_AWS_Region',
+            defaultValue: 'us-east-1',
             description: "Mention the Destination aws account region which will be as: \nap-south-1 "
         )
         text(
