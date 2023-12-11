@@ -25,3 +25,6 @@ spec:
     - name: docker-config
       configMap:
         name: docker-config
+    - name: workspace-volume
+      persistentVolumeClaim:
+        claimName: dh-pvc
