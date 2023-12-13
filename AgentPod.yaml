@@ -22,6 +22,9 @@ spec:
         name: swashikan-volume
         readOnly: false
   volumes:
+    - name: docker-config
+      configMap:
+        name: docker-config
     - name: swashikan-volume
       persistentVolumeClaim:
         claimName: dh-pv
