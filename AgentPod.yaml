@@ -18,10 +18,10 @@ spec:
     - cat
     tty: true
     volumeMounts:
-      - mountPath: "/home/node/jenkins"
-        name: "workspace-volume"
+      - mountPath: /home/node/jenkins
+        name: workspace-volume
         readOnly: false
   volumes:
     - name: workspace-volume
       persistentVolumeClaim:
-        claimName: ecr-migration-pvc
+        claimName: dh-pv
