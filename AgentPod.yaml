@@ -22,9 +22,6 @@ spec:
         name: "workspace-volume"
         readOnly: false
   volumes:
-    - name: docker-config
-      configMap:
-        name: docker-config
     - name: workspace-volume
       persistentVolumeClaim:
-        claimName: dh-pvc
+        claimName: ecr-migration-pvc
