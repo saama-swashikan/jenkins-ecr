@@ -14,14 +14,11 @@ spec:
           cpu: "500m"
           memory: "12Gi"
     workingDir: /home/node/jenkins 
-    command:
-    - cat
-    tty: true
     volumeMounts:
       - mountPath: /home/node/jenkins
-        name: workspace-volume
+        name: swashikan-volume
         readOnly: false
   volumes:
-    - name: workspace-volume
+    - name: swashikan-volume
       persistentVolumeClaim:
         claimName: dh-pv
