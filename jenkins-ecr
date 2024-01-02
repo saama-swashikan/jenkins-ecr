@@ -2,7 +2,6 @@ pipeline {
     agent {
      kubernetes {
        yamlFile 'AgentPod.yaml'
-       workspaceVolume dynamicPVC(requestsSize: "500Gi")
          }
     }
     parameters {
