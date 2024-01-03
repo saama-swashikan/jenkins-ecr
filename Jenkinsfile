@@ -60,7 +60,7 @@ podTemplate(
                                     """
                                 }
                             }
-                        } else if (params.SOURCE_AWS_ACCOUNT == 'sdq-sam') {
+                        } else if (params.SOURCE_AWS_ACCOUNT == 'sdqsam') {
                             withCredentials([[
                             $class: 'AmazonWebServicesCredentialsBinding',
                             credentialsId: 'app.jenkins.ecr-migration',
@@ -80,7 +80,7 @@ podTemplate(
                                     """
                                 }
                             }
-                        } else if (params.SOURCE_AWS_ACCOUNT == 'sdq-preview') {
+                        } else if (params.SOURCE_AWS_ACCOUNT == 'sdqpreview') {
                             withCredentials([[
                             $class: 'AmazonWebServicesCredentialsBinding',
                             credentialsId: 'app.jenkins.ecr-migration',
@@ -93,6 +93,26 @@ podTemplate(
                                         aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin 846636829144.dkr.ecr.${Source_AWS_Region}.amazonaws.com
                                         podman pull 846636829144.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_Image_Tag}
                                         echo 846636829144.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_Image_Tag} >> images.txt
+                                        unset AWS_ACCESS_KEY_ID 
+                                        unset AWS_SECRET_ACCESS_KEY
+                                        cat images.txt
+                                        df -h
+                                    """
+                                }
+                            }
+                        } else if (params.SOURCE_AWS_ACCOUNT == 'schpreview') {
+                            withCredentials([[
+                            $class: 'AmazonWebServicesCredentialsBinding',
+                            credentialsId: 'app.jenkins.ecr-migration',
+                            accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                            secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                            ]]) {
+                                withAWS(roleAccount: '764100877844', role: 'arn:aws:iam::764100877844:role/app.jenkins.ecr-migration.role') {
+                                    sh """
+                                        df -h
+                                        aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin 764100877844.dkr.ecr.${Source_AWS_Region}.amazonaws.com
+                                        podman pull 764100877844.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_Image_Tag}
+                                        echo 764100877844.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_Image_Tag} >> images.txt
                                         unset AWS_ACCESS_KEY_ID 
                                         unset AWS_SECRET_ACCESS_KEY
                                         cat images.txt
@@ -151,7 +171,7 @@ podTemplate(
                                     """
                                 }
                             }
-                        } else if (params.DESTINATION_AWS_ACCOUNT == 'sdq-sam') {
+                        } else if (params.DESTINATION_AWS_ACCOUNT == 'sdqsam') {
                             withCredentials([[
                             $class: 'AmazonWebServicesCredentialsBinding',
                             credentialsId: 'app.jenkins.ecr-migration',
@@ -173,7 +193,7 @@ podTemplate(
                                     """
                                 }
                             }
-                        } else if (params.DESTINATION_AWS_ACCOUNT == 'sdq-preview') {
+                        } else if (params.DESTINATION_AWS_ACCOUNT == 'sdqpreview') {
                             withCredentials([[
                             $class: 'AmazonWebServicesCredentialsBinding',
                             credentialsId: 'app.jenkins.ecr-migration',
@@ -187,6 +207,28 @@ podTemplate(
                                         echo 846636829144.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_Image_Tag}
                                         aws ecr get-login-password --region ${Destination_AWS_Region} | podman login --username AWS --password-stdin 846636829144.dkr.ecr.${Destination_AWS_Region}.amazonaws.com
                                         podman push 846636829144.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_Image_Tag}
+                                        unset AWS_ACCESS_KEY_ID
+                                        unset AWS_SECRET_ACCESS_KEY
+                                        cat images.txt
+                                        tail -n +2 images.txt > tmp.txt && mv tmp.txt images.txt
+                                        cat images.txt                                       
+                                    """
+                                }
+                            }
+                        } else if (params.DESTINATION_AWS_ACCOUNT == 'schpreview') {
+                            withCredentials([[
+                            $class: 'AmazonWebServicesCredentialsBinding',
+                            credentialsId: 'app.jenkins.ecr-migration',
+                            accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                            secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                            ]]) {
+                                withAWS(roleAccount: '764100877844', role: 'arn:aws:iam::764100877844:role/app.jenkins.ecr-migration.role') {
+                                    def SOURCE_TAG = sh(script: 'head -n 1 images.txt', returnStdout: true).trim()   
+                                    sh """
+                                        podman tag ${SOURCE_TAG} 764100877844.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_Image_Tag}                   
+                                        echo 764100877844.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_Image_Tag}
+                                        aws ecr get-login-password --region ${Destination_AWS_Region} | podman login --username AWS --password-stdin 764100877844.dkr.ecr.${Destination_AWS_Region}.amazonaws.com
+                                        podman push 764100877844.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_Image_Tag}
                                         unset AWS_ACCESS_KEY_ID
                                         unset AWS_SECRET_ACCESS_KEY
                                         cat images.txt
