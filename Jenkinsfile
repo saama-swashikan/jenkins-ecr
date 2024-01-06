@@ -6,12 +6,12 @@ podTemplate(
             command: 'cat',
             ttyEnabled: true,
             resourceLimitEphemeralStorage: '50Gi',
-            resourceLimitMemory: '8Gi'
+            resourceLimitMemory: '16Gi'
         )
     ],
     volumes: [
         dynamicPVC(
-            requestsSize : '500Gi', 
+            requestsSize : '300Gi', 
             mountPath: '/var/lib/containers/storage/vfs'
         )
     ]
