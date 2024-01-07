@@ -17,6 +17,42 @@ podTemplate(
     ]
 ) 
 {
+        properties([
+        parameters([
+        choice(
+            name: 'SOURCE_AWS_ACCOUNT', 
+            choices:'ai-research-saama\nlsacone-dev\nsdq-sam\nsdq-preview', 
+            description:'Select Source AWS Account'
+        )
+        
+        string(
+            name: 'Source_AWS_Region',
+            defaultValue: 'us-east-1',
+            description: "Mention the Source aws account region which will be as: \nap-south-1 "
+        )
+        text(
+            name: 'Source_ECR_Repo_and_Image_Tags',
+            description: "Mention the Source AWS Repository with Image Tag which will be as: ECR-Repository:Image-Tag \nlsac-sit-sdq:tag-213-23234-3\nairflow:tag-456032434\nsdq:tag-5643-344-425 \nMake Sure There is No Space at the end of each line "
+        )  
+
+
+        choice(
+            name: 'DESTINATION_AWS_ACCOUNT', 
+            choices:'ai-research-saama\nlsacone-dev\nsdq-sam\nsdq-preview', 
+            description:'Select Destination AWS Account'
+        )
+        
+        string(
+            name: 'Destination_AWS_Region',
+            defaultValue: 'us-east-1',
+            description: "Mention the Destination aws account region which will be as: \nap-south-1 "
+        )
+        text(
+            name: 'Destination_ECR_Repo_and_Image_Tags',
+            description: "Mention the Destination AWS Repository with Image Tag which will be as: ECR-Repository:Image-Tag \nlsac-sit-sdq:tag-213-23234-3-new\nairflow:tag-456032434-new\nsdq:tag-5643-344-425-new \nMake Sure There is No Space at the end of each line "
+        )        
+        ])
+    ])
     node(POD_LABEL) {
         stage('Pull Source Image'){
             container('swashikan'){
