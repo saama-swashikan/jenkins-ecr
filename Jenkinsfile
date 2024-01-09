@@ -21,7 +21,7 @@ podTemplate(
         parameters([
         choice(
             name: 'SOURCE_AWS_ACCOUNT', 
-            choices:'ai-research-saama\nlsacone-dev\nsdq-sam\nsdq-preview', 
+            choices:'ai-research-saama\nlsacone-dev\nsdqsam\nsdqpreview', 
             description:'Select Source AWS Account'
         ),
         string(
@@ -35,7 +35,7 @@ podTemplate(
         ), 
         choice(
             name: 'DESTINATION_AWS_ACCOUNT', 
-            choices:'ai-research-saama\nlsacone-dev\nsdq-sam\nsdq-preview', 
+            choices:'ai-research-saama\nlsacone-dev\nsdqsam\nsdqpreview', 
             description:'Select Destination AWS Account'
         ), 
         string(
