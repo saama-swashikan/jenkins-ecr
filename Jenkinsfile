@@ -62,7 +62,6 @@ podTemplate(
                             credentialsId: 'app.jenkins.ecr-migration'
                             ]]) {
                                 sh """
-                                echo ${isnor}
                                     df -h
                                     aws ecr get-login-password --region ${Source_AWS_Region} | podman login --username AWS --password-stdin 791532114280.dkr.ecr.${Source_AWS_Region}.amazonaws.com
                                     podman pull 791532114280.dkr.ecr.${Source_AWS_Region}.amazonaws.com/${Source_Image_Tag}
