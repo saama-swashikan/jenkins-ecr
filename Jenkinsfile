@@ -15,7 +15,8 @@ podTemplate(
             mountPath: '/var/lib/containers/storage/vfs'
         )
     ]
-) 
+)
+
 {
     properties([
         parameters([
@@ -275,4 +276,11 @@ podTemplate(
             }
         }
     }
+    post {
+        always {
+      echo 'I will always execute this!'
+    }
+    }
 }
+
+
