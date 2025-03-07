@@ -270,6 +270,29 @@ podTemplate(
                                 }
                             }
                         } 
+                        else if (params.DESTINATION_AWS_ACCOUNT == 'sam-uat') {
+                            withCredentials([[
+                            $class: 'AmazonWebServicesCredentialsBinding',
+                            credentialsId: 'app.jenkins.ecr-migration',
+                            accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                            secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                            ]]) {
+                                withAWS(roleAccount: '500645355862', role: 'arn:aws:iam::500645355862:role/app.jenkins.ecr-migration.role') {
+                                    def SOURCE_TAG = sh(script: 'head -n 1 images.txt', returnStdout: true).trim()   
+                                    sh """
+                                        podman tag ${SOURCE_TAG} 500645355862.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_Image_Tag}                   
+                                        echo 764100877844.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_Image_Tag}
+                                        aws ecr get-login-password --region ${Destination_AWS_Region} | podman login --username AWS --password-stdin 500645355862.dkr.ecr.${Destination_AWS_Region}.amazonaws.com
+                                        podman push 500645355862.dkr.ecr.${Destination_AWS_Region}.amazonaws.com/${Destination_Image_Tag}
+                                        unset AWS_ACCESS_KEY_ID
+                                        unset AWS_SECRET_ACCESS_KEY
+                                        cat images.txt
+                                        tail -n +2 images.txt > tmp.txt && mv tmp.txt images.txt
+                                        cat images.txt                                       
+                                    """
+                                }
+                            }
+                        } 
                     }    
                 }
             }
